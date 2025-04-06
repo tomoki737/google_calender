@@ -1,0 +1,29 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    tty: true
+    volumes:
+      - type: bind
+        source: ./src/backend/
+        target: /var/www/html
+    command: /bin/sh -c "uvicorn main:app"
+    env_file:
+      - ./src/backend/.env
+    ports:
+      - "8000:8000"
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    tty: true
+    volumes:
+      - type: bind
+        source: ./src/frontend/
+        target: /var/www/html
+    command: /bin/sh -c "npm install && npm run dev"
+    ports:
+      - "8082:5173"
